@@ -527,14 +527,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       el.addEventListener('click', function () {
         var label = el.getAttribute('data-cta-label') || el.textContent.trim();
 
-        // GTM / dataLayer event — configure a trigger on event "cta_click" in GTM if you want a tag built there
+        // GTM / dataLayer event — the "GA4 - CTA Click" tag inside GTM sends this on to GA4.
+        // (Do NOT also call gtag('event', ...) here — gtag() itself pushes to this same
+        // dataLayer, so it would fire the GTM tag a second time for one real click.)
         if (window.dataLayer) {
           window.dataLayer.push({ event: 'cta_click', cta_label: label });
-        }
-
-        // Direct GA4 event (gtag.js loaded independently of GTM)
-        if (typeof gtag === 'function') {
-          gtag('event', 'cta_click', { cta_label: label });
         }
 
         // Yandex.Metrika goal
